@@ -1,0 +1,201 @@
+<!-- map.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'bootstrap/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'myfont/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Map</title>
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js" defer></script>
+    
+</head>
+
+<body>
+    <div class='fluid-container'>
+<nav>
+    <a href="#" >Hospital Portal</a>
+    <a href="hospital_list/">List of Hospitals</a>
+    <a href="add/">Add Hospitals</a>
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
+</nav>
+<br>
+<div id="map"></div>
+<br><br>
+<center>
+  <div class="container">
+      <div class="ag-format-container">
+          <div class="ag-courses_box">
+              <div class='col-md-4 col-12' >
+            <div class="ag-courses_item">
+              <a href="#" class="ag-courses-item_link">
+                <div class="ag-courses-item_bg"></div>
+        
+                <div class="ag-courses-item_title">
+                  Hospital Portal<br>
+                  <br>It display the hospitals located in Madurai.When you click the marker the details of the hospital popups.
+                </div>
+
+                <div class="ag-courses-item_date-box">
+                  
+                  <span class="ag-courses-item_date">
+                    
+                  </span>
+                </div>
+              </a>
+          </div>
+      </div>
+      <div class='col-md-4 col-12'>
+          <div class="ag-courses_item">
+              <a href="#" class="ag-courses-item_link">
+                <div class="ag-courses-item_bg"></div>
+        
+                <div class="ag-courses-item_title">
+                  List of Hospitals<br><br>It display the list of hospitals in madurai in the table format.You can search  to find the hospital details
+                </div>
+        
+                <div class="ag-courses-item_date-box">
+                  
+                  <span class="ag-courses-item_date">
+                    
+                  </span>
+                </div>
+              </a>
+          </div>
+      </div>
+      <div class='col-md-4 col-12'>
+          <div class="ag-courses_item">
+              <a href="#" class="ag-courses-item_link">
+                <div class="ag-courses-item_bg"></div>
+        
+                <div class="ag-courses-item_title">
+                  Add Hospitals<br><br>In this you can enter the setails of the hospital it will store in db and display on the map                  </div>
+        
+                <div class="ag-courses-item_date-box">
+                  
+                  <span class="ag-courses-item_date">
+                    
+                  </span>
+                </div>
+              </a>
+          </div>
+      </div>
+          <!--div class="ag-courses_item">
+              <a href="#" class="ag-courses-item_link">
+                <div class="ag-courses-item_bg"></div>
+        
+                <div class="ag-courses-item_title">
+                  List of Hospitals<br><br>It display the list of hospitals in madurai in the table format.You can search with the keyword to find the hospital details
+                </div>
+        
+                <div class="ag-courses-item_date-box">
+                  
+                  <span class="ag-courses-item_date">
+                    
+                  </span>
+                </div>
+              </a>
+          </div>
+        
+          
+        
+          </div>
+        </div-->
+  </div>
+  </div>
+</center>
+</div>
+<script>
+    function myFunction() {
+        var x = document.querySelector("nav");
+        if (x.className === "") {
+            x.className += "responsive";
+        } else {
+            x.className = "";
+        }
+    }
+</script>
+
+
+
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
+<script>
+// Array to store valid coordinates along with hospital details
+var markers = L.markerClusterGroup();
+
+    // Default center coordinates for Madurai
+    var defaultCenter = [9.9252, 78.1198];
+
+    // Check if latitude and longitude are non-empty and defined
+    var isValidCoordinates = defaultCenter.every(coord => coord !== null && coord !== '');
+
+    var map;
+
+    if (isValidCoordinates) {
+        map = L.map('map').setView(defaultCenter, 12);
+    } else {
+        // Use default center if provided coordinates are not valid
+        map = L.map('map').setView([0, 0], 2);
+    }
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Array to store valid coordinates along with hospital details
+    var validCoordinates = [];
+
+    {% for hospital in hospitals %}
+        // Check if latitude and longitude are non-empty and defined
+        var latitude = {{ hospital.latitude|default:"null" }};
+        var longitude = {{ hospital.longitude|default:"null" }};
+        var isValidCoordinates = latitude !== null && longitude !== null &&
+                                latitude !== '' && longitude !== '';
+
+        if (isValidCoordinates) {
+            var hospitalDetails = {
+                name: '{{ hospital.name }}',
+                address: '{{ hospital.address }}',
+                phone: '{{ hospital.phone_number }}',
+                type: '{{ hospital.type_of_hospital }}'
+            };
+
+            validCoordinates.push({
+                coordinates: [latitude, longitude],
+                details: hospitalDetails
+            });
+        }
+    {% endfor %}
+
+    // Add markers using the valid coordinates and hospital details
+    validCoordinates.forEach(function(data) {
+        var marker = L.marker(data.coordinates)
+            .bindPopup('<b>' + data.details.name + '</b><br>' + data.details.address + '<br>' + data.details.phone + '<br>' + data.details.type);
+
+        markers.addLayer(marker);
+    });
+
+    // Add the marker cluster group to the map
+    map.addLayer(markers);
+
+
+
+
+</script>
+    
+</body>
+</html>

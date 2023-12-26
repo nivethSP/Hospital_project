@@ -1,0 +1,22 @@
+<!-- hospital_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ hospital.name }} Details</title>
+</head>
+<body>
+    
+    <h1>{{ hospital.name }} Details</h1>
+    <p><strong>Address:</strong> {{ hospital.address }}</p>
+    <p><strong>Phone Number:</strong> {{ hospital.phone_number }}</p>
+    <p><strong>Type of Hospital:</strong> {{ hospital.type_of_hospital }}</p>
+    <p><strong>Latitude:</strong> {{ hospital.latitude }}</p>
+    <p><strong>Longitude:</strong> {{ hospital.longitude }}</p>
+
+    <!-- Add more details as needed -->
+
+    <a href="{% url 'hospital-map' %}">Back to Map</a>
+</body>
+</html>

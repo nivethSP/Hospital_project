@@ -1,0 +1,95 @@
+<!-- add_hospital.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Hospital</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #f16071;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+
+        a {
+            display: block;
+            margin-top: 16px;
+            text-decoration: none;
+            color: #f16071;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <label for="{{ form.name.id_for_label }}">Hospital Name:</label>
+        {{ form.name }}
+
+        <label for="{{ form.address.id_for_label }}">Address:</label>
+        {{ form.address }}
+
+        <label for="{{ form.phone_number.id_for_label }}">Phone Number:</label>
+        {{ form.phone_number }}
+
+        <label for="{{ form.type_of_hospital.id_for_label }}">Type of Hospital:</label>
+        {{ form.type_of_hospital }}
+
+        <label for="{{ form.latitude.id_for_label }}">Latitude:</label>
+        {{ form.latitude }}
+
+        <label for="{{ form.longitude.id_for_label }}">Longitude:</label>
+        {{ form.longitude }}
+
+        <button type="submit">Save Hospital</button>
+    </form>
+
+    <a href="{% url 'hospital-map' %}">Back to Map</a>
+</body>
+</html>

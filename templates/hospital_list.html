@@ -1,0 +1,107 @@
+<!-- hospital_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'bootstrap/bootstrap.min.css' %}">
+          <link rel="stylesheet" href="{% static 'myfont/css/all.min.css' %}">
+          <link rel="stylesheet" href="{% static 'css/style.css' %}">
+          <script src="{% static 'jquery/jquery.min.js'%}" ></script>
+          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy/Z5nUfi4SMtC5nqd6l9p8Z8JcFZk8JvF" crossorigin="anonymous">
+
+<!-- Bootstrap JavaScript and Popper.js CDN -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-3dSsPmKtGfL4lA5ZLtcLb3jvYXo8FUI5PUuNsLW6Keh2MGEdoJ3Xc1IfYAU6KlMs" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy/Z5nUfi4SMtC5nqd6l9p8Z8JcFZk8JvF" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital List</title>
+    <!-- Include jQuery from CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+       
+    </style>
+</head>
+<body>
+    <div class ="fluid-container">
+    <!--nav>
+        <a href="http://127.0.0.1:8000/" class="active">Hospital Portal</a>
+        <a href="">List of Hospitals</a>
+        <a href="#"></a>
+        <a href="#"></a>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
+    </nav-->
+
+    <center><h2>Madurai Hospital List</h2></center>
+
+    <!-- Dropdown list to select column for filtering -->
+    <label for="columnSelector">Select Column:</label>
+    <select id="columnSelector">
+        <option value="0">Name</option>
+        <option value="1">Address</option>
+        
+        <option value="3">Type of Hospital</option>
+        
+    </select>
+
+    <!-- Search input -->
+    <input type="text" id="searchInput" placeholder="Search...">
+    <div class="table-responsive">
+    <table id="hospitalTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Type of Hospital</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for hospital in hospitals %}
+                <tr>
+                    <td>{{ hospital.name }}</td>
+                    <td>{{ hospital.address }}</td>
+                    <td>{{ hospital.phone_number }}</td>
+                    <td>{{ hospital.type_of_hospital }}</td>
+                    <td>{{ hospital.latitude }}</td>
+                    <td>{{ hospital.longitude }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    <script>
+        // Function to filter table rows based on input value and selected column
+        function filterTable() {
+            var input, filter, table, tr, td, columnIndex, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("hospitalTable");
+            tr = table.getElementsByTagName("tr");
+            columnIndex = parseInt(document.getElementById("columnSelector").value);
+
+            // Loop through all table rows, and hide those that don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[columnIndex];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        // Attach the filter function to the input's keyup event and dropdown's change event
+        $(document).ready(function() {
+            $("#searchInput, #columnSelector").on("keyup change", filterTable);
+        });
+    </script>
+</div>
+</body>
+</html>
